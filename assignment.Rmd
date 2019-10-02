@@ -27,6 +27,12 @@ dat = iris %>%
 ```{r}
 head(dat)
 ```
+```{r}
+View(dat)
+```
+```{r}
+summary(dat)
+```
 
 
 ### Plot the data  
@@ -34,7 +40,7 @@ head(dat)
 Use `geom_point` and `geom_smooth` to visually identify any relationship between the two variables. Use `sepal_length` along the x-axis.
 ```{r}
 dat %>%
-  ggplot(...) +
+  ggplot(aes(x=sepal_length, y=petal_length)) +
   geom_point() + 
   geom_smooth()
 ```
@@ -50,13 +56,14 @@ Keep changing the slope & intercept values to see what it does to your line of b
 # m is slope, b is intercept
 # residuals are the difference between y and the fit
 # hint: petal_length is the `y` in this case, sepal_length is the `x`
+# residuals = y - fit
 
-m = 0  # Slope
-b = 0  # Intercept
+m = 1.7  # Slope
+b = -6.3  # Intercept
 
 final_data = dat %>%
-  mutate(fit = ...,
-         residuals = ...,
+  mutate(fit = (m * sepal_length) + b,
+         residuals = fit - petal_length,
          squared_residuals = residuals^2)
 
 
@@ -71,10 +78,12 @@ final_data %>%
 ### Plot a histogram of the residuals  
 
 In lay person terms, what do the residuals tell us and why should we care about them?
+The residuals are are skewed to a bit to the left of zero and there's a spike around 1.4..not quite a "normal" distribution
 ```{r}
 final_data %>%
-  ggplot(...) + 
-  geom_histogram()
+  #residuals already calculated above
+  ggplot(aes(x=residuals)) + 
+  geom_histogram(bins=30)
 ```
 
 
@@ -82,7 +91,27 @@ final_data %>%
 
 Use the `lm` function to model your data, and then compare the results to the slope and intercept you chose above. In lay person terms, write a short description of what the slope of the model means.
 ```{r}
-mod = lm(... ~ ..., data = dat)
+#lm(y ~ x)
+mod = lm(petal_length ~ sepal_length, data = dat)
 summary(mod)
+```
+
+### Ploting Data with lm model results
+```{r}
+lm_slope = 1.85843  # Slope
+lm_intercept = -7.10144  # Intercept
+
+final_data = dat %>%
+  mutate(fit = (lm_slope * sepal_length) + lm_intercept,
+         residuals = fit - petal_length,
+         squared_residuals = residuals^2)
+
+
+### The part below is done for you
+final_data %>%
+  ggplot(aes(x = sepal_length)) + 
+  geom_point(aes(y = petal_length)) + 
+  geom_line(aes(y = fit), col = 'red')
+
 ```
 

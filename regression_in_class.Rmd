@@ -66,7 +66,8 @@ dat %>%
 ```
 
 
-Huh??? why did that happen?
+Huh??? why did that happen? 
+NEED TO GROUP BY DATE AND TOTAL THE USERS
 ```{r}
 dat %>%
   group_by(date) %>%
@@ -78,7 +79,7 @@ dat %>%
 ```
 
 
-What does the distribution of daily users per hour look like?
+What does the distribution of average daily users per hour look like?
 ```{r}
 dat %>%
   group_by(date, hour) %>%
@@ -89,7 +90,7 @@ dat %>%
 ```
 
 
-What's the distribution of average users by day of the week look like?
+What's the distribution of average users by day of the week per hour look like?
 ```{r}
 dat %>%
   group_by(date, hour, day_of_the_week) %>%
@@ -220,7 +221,7 @@ plot(temporary)
 
 We will call temperature feels like `x` and total users `y` to make our introduction to linear regression easier.
 ```{r}
-reg_dat = tibble(x = clean_dat$temperature_feels_f, y = clean_dat$total_users)
+reg_dat = tibble(x = clean_dat$temperature_feels_f, y = clean_dat$total_users)  
 reg_dat
 ```
 
@@ -382,5 +383,10 @@ summary(mod)
 ```
 
 The slope tells us how much 1 unit change in `temperature_feels_f` relates to change in `total_users`. So in this case, 3.5 more users for every 1 degree increase! They are huge global warming fans...
+```{r}
+mod = lm(total_users ~ ., data = clean_dat)
+summary(mod)
+```
+
 
 R-squared will tell us how good the line fits. The closer to 1 it is, the better. We will talk about the other measurements as we move forward in comparing models!
