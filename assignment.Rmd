@@ -90,6 +90,8 @@ final_data %>%
 ### Use the linear regression function  
 
 Use the `lm` function to model your data, and then compare the results to the slope and intercept you chose above. In lay person terms, write a short description of what the slope of the model means.
+
+When running lm model, the `intercept` is `-7.1` and the `slope` is 1.85. So for every unit (1) of increase in the sepal_length (x) the model predicts an increase of 1.85 in petal_length.
 ```{r}
 #lm(y ~ x)
 mod = lm(petal_length ~ sepal_length, data = dat)
